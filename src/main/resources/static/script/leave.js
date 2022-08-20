@@ -1,7 +1,7 @@
-const startLeaveDate = document.getElementById("startLeaveDate");
-const endLeaveDate = document.getElementById("endLeaveDate");
-const anteLeaveStart = document.getElementById("anteLeaveStart");
-const anteLeaveEnd = document.getElementById("anteLeaveEnd");
+const startLeaveDate = document.getElementById("startDate");
+const endLeaveDate = document.getElementById("endDate");
+const anteLeaveStart = document.getElementById("morningStartDate");
+const anteLeaveEnd = document.getElementById("morningEndDate");
 const annualLeave = document.getElementById("annualLeave");
 
 let flagTouchStartLeaveDate = false;
@@ -20,10 +20,10 @@ const diffDate = () => {
       return alert("Vui long chon 2!");
     }
     console.log(anteLeaveStart.value);
-    if (anteLeaveStart.value === "2") {
+    if (anteLeaveStart.value === "0") {
       countday = countday - 0.5;
     }
-    if (anteLeaveEnd.value === "2") {
+    if (anteLeaveEnd.value === "0") {
       countday = countday + 0.5;
     }
     console.log(countday);

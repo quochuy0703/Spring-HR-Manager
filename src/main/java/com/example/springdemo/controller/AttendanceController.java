@@ -1,6 +1,7 @@
 package com.example.springdemo.controller;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.springdemo.entity.AnnualLeave;
 import com.example.springdemo.entity.User;
 import com.example.springdemo.entity.WorkHour;
 import com.example.springdemo.service.MultiService;
@@ -73,9 +75,50 @@ public class AttendanceController {
 
         User theUser = (User )request.getAttribute("user");
 
+        AnnualLeave annualLeave = new AnnualLeave();
+
         theModel.addAttribute("user", theUser);
         theModel.addAttribute("path", "/");
         theModel.addAttribute("pageTitle", "Xin nghi phep");
+        theModel.addAttribute("annualLeave", annualLeave);
         return "leave";
+    }
+
+    @PostMapping("/leave")
+    public String showLeave(@ModelAttribute("annualLeve") AnnualLeave annualLeave, Model theModel, HttpServletRequest request){
+
+        User theUser = (User )request.getAttribute("user");
+
+        //tín toán số ngày nghỉ phép và lưu vào countDay
+        long diffdate = annualLeave.getEndDate().getTime() - annualLeave.getStartDate().getTime();
+        float countDay = TimeUnit.MILLISECONDS.toDays(diffdate) % 365;
+        if (diffdate < 0) {
+            
+        }
+        if (!annualLeave.isMorningStartDate()) {
+            countDay = countDay - 0.5f;
+        }
+        if (!annualLeave.isMorningEndDate()) {
+            countDay = countDay + 0.5f;
+        }
+        annualLeave.setCountDay(countDay);
+
+        if(countDay > theUser.getAnnualLeave()){
+            theModel.addAttribute("user", theUser);
+            theModel.addAttribute("path", "/");
+            theModel.addAttribute("pageTitle", "Xin nghi phep");
+            theModel.addAttribute("errorMessage", "Nhap nghi phep khong thanh cong");
+            theModel.addAttribute("annualLeave", annualLeave);
+
+            return "/leave";
+        }
+
+        annualLeave.setUser(theUser);
+        multiService.saveAnnualLeave(annualLeave);
+        theUser.setAnnualLeave(theUser.getAnnualLeave() - countDay);
+        multiService.saveUser(theUser);
+
+
+        return "redirect:/leave";
     }
 }

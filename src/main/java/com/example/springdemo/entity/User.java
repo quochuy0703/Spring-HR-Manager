@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="user")
@@ -48,9 +49,8 @@ public class User {
     @JoinColumn(name="user_id")
     private List<WorkHour> workHours;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
-    private List<AnnualLeave> annualLeaves;
+
+
 
 
     public void addWorkHour(WorkHour workHour){
@@ -62,14 +62,7 @@ public class User {
         workHours.add(workHour);
     }
 
-    public void addWorkHour(AnnualLeave annualLeave){
-
-        if(annualLeaves == null){
-            annualLeaves = new ArrayList<>();
-        }
-
-        annualLeaves.add(annualLeave);
-    }
+    
 
 
     public List<WorkHour> getWorkHours() {
@@ -135,24 +128,9 @@ public class User {
 
 
 
-
-
-
-
-
-
-
     public WorkHour getCurrentWork() {
         return currentWork;
     }
-
-
-
-
-
-
-
-
 
 
     public void setCurrentWork(WorkHour currentWork) {
@@ -168,14 +146,15 @@ public class User {
 
 
 
+
     public void setAnnualLeave(float annualLeave) {
         this.annualLeave = annualLeave;
     }
 
 
-    
 
 
-    
+
+
 
 }
