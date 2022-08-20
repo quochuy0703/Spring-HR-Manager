@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout::head"> </head>
+  <body>
+    <nav th:replace="layout::navigation"></nav>
+    <h2 class="text-center py-4">Gửi đơn xin nghỉ phép</h2>
+    <div class="container" th:object="${user}">
+      <div class="jumbotron py-3">
+        <p class="col-12">Lựa chọn các chức năng sau:</p>
+        <a class="btn btn-primary mx-2" th:href="@{/attendance}">
+          Điểm danh/ Kết thúc làm việc
+        </a>
+        <a class="btn btn-primary mx-2 disabled">Xin nghỉ phép</a>
+      </div>
+      <div class="jumbotron py-3">
+        <form th:action="@{/leave}" method="POST">
+          <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-12">
+              <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-6">
+                  <p>Tên nhân viên:</p>
+                </div>
+                <div class="col-md-8 col-sm-6 col-xs-6">
+                  <span
+                    th:text="${user.firstName} +' '+ ${user.lastName}"
+                  ></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-12">
+              <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-6"><p>Trạng thái:</p></div>
+                <div class="col-md-8 col-sm-6 col-xs-6">
+                  <span
+                    th:text="*{isWork ? 'Làm việc' : 'Không làm việc'}"
+                  ></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-inline col-md-6">
+              <label class="my-1 mr-2" for="anteLeaveStart"
+                >Ngày bắt đầu nghỉ:
+              </label>
+              <select
+                class="custom-select my-1 mr-sm-2"
+                id="anteLeaveStart"
+                name="anteLeaveStart"
+              >
+                <option value="1" selected>Sáng</option>
+                <option value="2">Chiều</option>
+              </select>
+              <input
+                type="date"
+                class="form-control"
+                name="startLeaveDate"
+                id="startLeaveDate"
+              />
+            </div>
+            <div class="form-group form-inline col-md-6">
+              <label class="my-1 mr-2" for="anteLeaveEnd">Ngày vào làm: </label>
+              <select
+                class="custom-select my-1 mr-sm-2"
+                id="anteLeaveEnd"
+                name="anteLeaveEnd"
+              >
+                <option value="1" selected>Sáng</option>
+                <option value="2">Chiều</option>
+              </select>
+              <input
+                type="date"
+                class="form-control"
+                name="endLeaveDate"
+                id="endLeaveDate"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-12">
+              <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-6">
+                  <p>Số ngày nghỉ:</p>
+                </div>
+                <div class="col-md-8 col-sm-6 col-xs-6">
+                  <p id="annualLeave">--</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="infoLeave">Lý do nghỉ phép:</label>
+            <textarea
+              class="form-control"
+              name="reasonLeave"
+              id="reasonLeave"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Gửi sếp duyệt</button>
+        </form>
+      </div>
+
+      <div class="jumbotron py-3">
+        <p>Thông tin ngày nghỉ phép:</p>
+        <div class="row">
+          <div
+            class="col-md-6 col-sm-9 col-xs-12 d-flex justify-content-between"
+          >
+            <p>Số ngày nghỉ còn lại</p>
+
+            <div>
+              <p class="px-5 bg-success" th:text="${user.annualLeave}"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script th:src="@{/script/leave.js}"></script>
+  </body>
+</html>
