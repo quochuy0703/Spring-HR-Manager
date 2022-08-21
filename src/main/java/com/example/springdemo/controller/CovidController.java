@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.springdemo.entity.Covid;
 import com.example.springdemo.entity.Injection;
 import com.example.springdemo.entity.Temp;
 import com.example.springdemo.entity.User;
@@ -75,5 +76,31 @@ public class CovidController {
         multiService.saveInjection(theInjection);
         
         return "redirect:/covid/injection";
+    }
+
+    @GetMapping("/info-covid")
+    public String showCovidInfoPage(Model theModel, HttpServletRequest request){
+        Covid theCovid = new Covid();
+        User user = (User) request.getAttribute("user");
+        theModel.addAttribute("covid", theCovid);
+        theModel.addAttribute("user", user);
+        return "covid/info";
+
+    }
+
+    @PostMapping("/info-covid")
+    public String processCovidInfo(@ModelAttribute("covid") Covid theCovid, Model theModel, HttpServletRequest request){
+
+        User user = (User) request.getAttribute("user");
+        System.out.println(theCovid);
+        if(theCovid.getDateCovid() == null){
+            theCovid.setDateCovid(new Date());
+        }
+
+        user.addCovid(theCovid);
+
+        multiService.saveCovid(theCovid);
+        
+        return "redirect:/covid/info-covid";
     }
 }

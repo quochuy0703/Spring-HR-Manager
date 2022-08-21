@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout::head"> </head>
+  <body>
+    <nav th:replace="layout::navigation"></nav>
+    <h1 class="text-center">Thông tin làm việc</h1>
+    <div class="container">
+      <div class="card my-3">
+        <div class="card-header">
+          Lựa chọn các chức năng sau:
+        </div>
+        <div class="card-body">
+          <a class="btn btn-primary mx-2 " th:href="@{/covid}">
+           Thân nhiệt
+          </a>
+          <a class="btn btn-primary mx-2 " th:href="@{/covid/injection}">Tiêm Covid</a>
+          <a class="btn btn-primary mx-2 disabled" th:href="@{/covid/info-covid}">Tình trạng Covid</a>
+          <!-- <%if(isManager){%>
+          <a class="btn btn-primary mx-2" href="/covid/info-staff">Quản lý nhân viên</a>
+          <%}%> -->
+        </div>
+      </div>
+
+      <div class="card my-3">
+        <div class="card-header">
+          <h4 class="text-center">Khai báo Covid</h4>
+        </div>
+        <div class="card-body">
+          <form th:action="@{/covid/info-covid}" th:object="${covid}" method="POST">
+      
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" th:field="*{covidInfo}" value="1">
+                <label class="form-check-label" for="covid01">Dương tính</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" th:field="*{covidInfo}" value="0">
+                <label class="form-check-label" for="covid02">Âm tính</label>
+              </div>
+            
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+          </form>
+           
+            
+        </div>
+      </div>
+
+      <div class="card my-3">
+        <div class="card-header">
+          <h4 class="text-center">Chi tiết tình trạng Covid</h4>
+        </div>
+        <div class="card-body">
+          
+         
+            <table class="table" th:if="${#lists.size(user.covids)  != 0}">
+           
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Ngày</th>
+                  <th scope="col">Tình trạng Covid</th>
+
+
+  
+                </tr>
+              </thead>
+              <tbody>
+              
+                 
+                      <tr th:each="covid: ${user.covids}">
+                        <th scope="row" th:text="${covidStat.index + 1}"></th>
+                        <td th:text="${covid.dateCovid}"></td>
+                        <td th:text="${covid.covidInfo ? 'Dương tính': 'Âm tính'}"></td>
+
+                      </tr>
+              
+
+                
+              </tbody>
+            </table>
+        
+            <p th:if="${#lists.size(user.covids)  == 0}">Chưa có thông tin</p>
+      
+            
+        </div>
+      </div>
+
+  </body>
+</html>

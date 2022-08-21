@@ -57,6 +57,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
     private List<Injection> injections;
 
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
+    private List<Covid> covids;
+
+
 
     public void addWorkHour(WorkHour workHour){
 
@@ -86,6 +90,14 @@ public class User {
 
         injections.add(injection);
         injection.setUser(this);
+    }
+
+    public void addCovid(Covid covid){
+        if(covids == null){
+            covids = new ArrayList<>();
+        }
+        covids.add(covid);
+        covid.setUser(this);
     }
 
     
@@ -191,6 +203,14 @@ public class User {
 
     public void setInjections(List<Injection> injections) {
         this.injections = injections;
+    }
+
+    public List<Covid> getCovids() {
+        return covids;
+    }
+
+    public void setCovids(List<Covid> covids) {
+        this.covids = covids;
     }
 
 

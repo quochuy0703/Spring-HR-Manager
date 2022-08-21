@@ -3,6 +3,7 @@ package com.example.springdemo.service;
 import java.util.List;
 
 import com.example.springdemo.entity.AnnualLeave;
+import com.example.springdemo.entity.Covid;
 import com.example.springdemo.entity.Injection;
 import com.example.springdemo.entity.Temp;
 import com.example.springdemo.entity.User;
@@ -20,4 +21,6 @@ public interface MultiService {
     public void saveTemp(Temp theTemp);
 
     public void saveInjection(Injection injection);
+
+    public void saveCovid(Covid covid);
 }

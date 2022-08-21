@@ -32,6 +32,7 @@ public class AttendanceController {
         User user = (User) request.getAttribute("user");
         System.out.println(user.getCurrentWork());
         WorkHour workHour = new WorkHour();
+        workHour.setWorkPlace("1");
 
         theModel.addAttribute("workHour", workHour);
         theModel.addAttribute("user", user);
