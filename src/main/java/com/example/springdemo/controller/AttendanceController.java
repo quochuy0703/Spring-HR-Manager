@@ -62,9 +62,10 @@ public class AttendanceController {
 
         User theUser = (User )request.getAttribute("user");
         theUser.getCurrentWork().setEndHour(new Date());
+        multiService.saveWorkHour(theUser.getCurrentWork());
         theUser.setCurrentWork(null);
         theUser.setWork(false);
-
+        
         multiService.saveUser(theUser);
         
         return "redirect:/attendance";

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout::head"> </head>
+  <body>
+    <nav th:replace="layout::navigation"></nav>
+    <h1 class="text-center">Thông tin làm việc</h1>
+    <div class="container">
+      <div class="card my-3">
+        <div class="card-header">
+          Lựa chọn các chức năng sau:
+        </div>
+        <div class="card-body">
+          <a class="btn btn-primary mx-2 disabled">
+           Thân nhiệt
+          </a>
+          <a class="btn btn-primary mx-2" th:href="@{/covid/injection}">Tiêm Covid</a>
+          <a class="btn btn-primary mx-2" th:href="@{/covid/info-covid}">Tình trạng Covid</a>
+          <!-- <%if(isManager){%>
+          <a class="btn btn-primary mx-2" href="/covid/info-staff">Quản lý nhân viên</a>
+          <%}%> -->
+        </div>
+      </div>
+
+      <div class="card my-3">
+        <div class="card-header">
+          <h4 class="text-center">Đăng ký thân nhiệt</h4>
+          <p th:text="#{title.welcome}"></p>
+        </div>
+        <div class="card-body">
+          <form th:action="@{/covid/temp}" th:object="${temp}" method="POST">
+            <div class="row"> <div class="col-md-4 input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Nhiệt độ cơ thể</span>
+              </div>
+              <input type="number" th:field="*{temp}" class="form-control" value='37.0' min="0.0" step="0.1">
+            </div>
+            <div class="col-md-6 input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" >Ngày giờ</span>
+                
+              </div>
+              <input type="datetime-local" th:field="*{dateTemp}" class="form-control">
+              
+              
+            </div></div>
+           
+            <p id="emailHelp" class="form-text text-muted">Để trống thông tin ngày giờ nếu là hiện tại</p>
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+          </form>
+           
+            
+        </div>
+      </div>
+
+      <div class="card my-3">
+        <div class="card-header">
+          <h4 class="text-center">Chi tiết thân nhiệt</h4>
+        </div>
+        <div class="card-body">
+          
+            <table class="table" th:if="${#lists.size(user.temps) != 0}">
+           
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Ngày</th>
+                  <th scope="col">Nhiệt độ(độ C)</th>
+
+  
+                </tr>
+              </thead>
+              <tbody>
+              
+                 
+                      <tr th:each="temp : ${user.temps}">
+                        <th scope="row" th:text="${tempStat.index +1}"></th>
+                        <td th:text="${temp.dateTemp}"></td>
+                        <td th:text="${temp.temp}"></td>
+
+                      </tr>
+              
+
+                
+              </tbody>
+            </table>
+      
+            <p th:if="${#lists.size(user.temps) == 0}">Chưa có thông tin</p>
+          
+           
+            
+        </div>
+      </div>
+  </body>
+</html>

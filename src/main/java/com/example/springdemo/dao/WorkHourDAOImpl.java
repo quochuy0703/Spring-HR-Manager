@@ -3,9 +3,10 @@ package com.example.springdemo.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,21 +21,23 @@ public class WorkHourDAOImpl implements WorkHourDAO {
 	@Override
 	public List<WorkHour> findWorkHourByUserId(int theUserId) {
         
-		Session session = entityManager.unwrap(Session.class);
+		
 
-        Query query = session.createQuery("from WorkHour w where w.user_id = :userId", WorkHour.class);
+        Query query = entityManager.createQuery("from WorkHour w where w.user_id = :userId", WorkHour.class);
 
         query.setParameter("userId", theUserId);
 
-        List<WorkHour> theWorkHours = query.list();
+        List<WorkHour> theWorkHours = query.getResultList();
 
 		return theWorkHours;
 	}
 
     @Override
     public void saveWorkHour(WorkHour workHour) {
-        Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(workHour);
+
+        
+        
+        entityManager.merge(workHour);
         
     }
     

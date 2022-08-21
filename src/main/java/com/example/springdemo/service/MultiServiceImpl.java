@@ -1,6 +1,7 @@
 package com.example.springdemo.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.springdemo.dao.AnnualLeaveDAO;
+import com.example.springdemo.dao.InjectionRepository;
+import com.example.springdemo.dao.TempDAO;
 import com.example.springdemo.dao.UserDAO;
 import com.example.springdemo.dao.WorkHourDAO;
 import com.example.springdemo.entity.AnnualLeave;
+import com.example.springdemo.entity.Injection;
+import com.example.springdemo.entity.Temp;
 import com.example.springdemo.entity.User;
 import com.example.springdemo.entity.WorkHour;
 
@@ -25,6 +30,12 @@ public class MultiServiceImpl implements MultiService{
 
     @Autowired
     private AnnualLeaveDAO annualLeaveDAO;
+
+    @Autowired
+    private TempDAO tempDAO;
+
+    @Autowired
+    private InjectionRepository injectionRepository;
 
     @Override
     @Transactional
@@ -52,6 +63,26 @@ public class MultiServiceImpl implements MultiService{
     public void saveAnnualLeave(AnnualLeave annualLeave) {
         
         annualLeaveDAO.saveAnnualLeave(annualLeave);
+        
+    }
+
+    @Override
+    @Transactional
+    public List<Temp> findTempByUserId(int userId) {
+        
+        return this.tempDAO.findTempByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public void saveTemp(Temp theTemp) {
+       
+        this.tempDAO.saveTemp(theTemp);
+    }
+
+    @Override
+    public void saveInjection(Injection injection) {
+        this.injectionRepository.save(injection);
         
     }
     

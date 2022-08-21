@@ -14,7 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Entity
 @Table(name="user")
@@ -45,12 +47,15 @@ public class User {
     @JoinColumn(name="current_work")
     private WorkHour currentWork;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany( cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private List<WorkHour> workHours;
 
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
+    private List<Temp> temps;
 
-
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
+    private List<Injection> injections;
 
 
     public void addWorkHour(WorkHour workHour){
@@ -60,6 +65,27 @@ public class User {
         }
 
         workHours.add(workHour);
+       
+    }
+
+    public void addTemp(Temp temp){
+
+        if(temps == null){
+            temps = new ArrayList<>();
+        }
+
+        temps.add(temp);
+        temp.setUser(this);
+    }
+
+    public void addInjection(Injection injection){
+
+        if(injections == null){
+            injections = new ArrayList<>();
+        }
+
+        injections.add(injection);
+        injection.setUser(this);
     }
 
     
@@ -149,6 +175,22 @@ public class User {
 
     public void setAnnualLeave(float annualLeave) {
         this.annualLeave = annualLeave;
+    }
+
+    public List<Temp> getTemps() {
+        return temps;
+    }
+
+    public void setTemps(List<Temp> temps) {
+        this.temps = temps;
+    }
+
+    public List<Injection> getInjections() {
+        return injections;
+    }
+
+    public void setInjections(List<Injection> injections) {
+        this.injections = injections;
     }
 
 
