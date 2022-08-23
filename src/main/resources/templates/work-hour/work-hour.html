@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout::head"> </head>
+  <body>
+    <nav th:replace="layout::navigation"></nav>
+    <h1 class="text-center">Quá trình làm việc</h1>
+    <div class="container">
+        <div class="card my-3">
+            <div class="card-header">
+              Lựa chọn các chức năng sau:
+            </div>
+    
+            <div class="card-body">
+              <a class="btn btn-primary mx-2 disabled">
+                Phiên làm việc
+              </a>
+              <a class="btn btn-primary mx-2" th:href="@{/work-hour/annual-leaves}">Ngày phép</a>
+              <a class="btn btn-primary mx-2" th:href="@{/work-hour/salary}">Chi tiết lương</a>
+              <a class="btn btn-primary mx-2" th:href="@{/work-hour/search}">Tìm kiếm</a>
+              
+            </div>
+            <div class="card my-3">
+                <div class="card-header">
+                  <h4 class="text-center">Phiên làm việc</h4>
+                  
+                  
+                  
+                </div>
+                <div class="card-body">
+                    <table class="table">
+           
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Bắt đầu</th>
+                            <th scope="col">Kết thúc</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Nơi làm việc</th>
+            
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <div th:each="sessionWork : ${sessionWorkHour}">
+                            <tr>
+                              <th colspan="5" class="text-center" th:text="${#dates.format(sessionWork.dateSession, 'yyyy-MM-dd')}"></th>
+                            </tr>
+                            <tr th:each="workHour : ${sessionWork.sessionWorkHour}">
+                              <th scope="row" th:text="${workHourStat.index +1}"></th>
+                              <td th:text="${#dates.format(workHour.startHour, 'HH:mm:ss')}"></td>
+                              <td th:text="${workHour.endHour != null ? #dates.format(workHour.endHour, 'HH:mm:ss') :'--'}"></td>
+                              <td th:text="${workHour.endHour != null ? #dates.format(workHour.dateDiff, 'HH:mm:ss' ): '--'}"></td>
+                              <td th:text="#{'workplace.type.' +${workHour.workPlace}}"></td>
+                            </tr>
+                            <tr>
+                              <th colspan="2" rowspan="3" class="text-center">Tổng cộng</th>
+                              <th>Tổng giờ</th>
+                              <td th:text="${#dates.format(sessionWork.sumWorkHour, 'HH:mm:ss', 'GMT' )}"></td>
+            
+                            </tr>
+                            <tr>
+                              <th>Tổng thêm giờ</th>
+                              <td ><%= workedHour.overTime%></td>
+            
+                            </tr>
+                            <tr>
+                              <th>Nghỉ phép</th>
+                              <td ><% if(workedHour.leave){%><%= workedHour.leave %><%}else{%><%=0.0%><%}%></td>
+            
+                            </tr>
+                          </div>
+                            
+                                
+                       
+                            
+            
+              
+                          
+                        </tbody>
+                      </table>
+                </div>
+              
+          </div>
+    </div>
+  </body>
+</html>

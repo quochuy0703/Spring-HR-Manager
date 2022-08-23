@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
+
 @Entity
 @Table(name="work_hour")
 public class WorkHour {
@@ -32,6 +34,8 @@ public class WorkHour {
     private String workPlace;
 	
 
+	@Formula(value="timediff(end_hour, start_hour)")
+	private Date dateDiff;
     
 
 	public WorkHour() {
@@ -83,6 +87,18 @@ public class WorkHour {
 
 	public void setWorkPlace(String workPlace) {
 		this.workPlace = workPlace;
+	}
+
+
+
+	public Date getDateDiff() {
+		return dateDiff;
+	}
+
+
+
+	public void setDateDiff(Date dateDiff) {
+		this.dateDiff = dateDiff;
 	}
 
     
