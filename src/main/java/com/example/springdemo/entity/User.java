@@ -52,6 +52,9 @@ public class User {
     private List<WorkHour> workHours;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
+    private List<AnnualLeave> annualLeaves;
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
     private List<Temp> temps;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
@@ -98,6 +101,14 @@ public class User {
         }
         covids.add(covid);
         covid.setUser(this);
+    }
+
+    public void addAnnualLeave(AnnualLeave annualLeave){
+        if(annualLeaves == null){
+            annualLeaves = new ArrayList<>();
+        }
+        annualLeaves.add(annualLeave);
+        annualLeave.setUser(this);
     }
 
     
@@ -211,6 +222,14 @@ public class User {
 
     public void setCovids(List<Covid> covids) {
         this.covids = covids;
+    }
+
+    public List<AnnualLeave> getAnnualLeaves() {
+        return annualLeaves;
+    }
+
+    public void setAnnualLeaves(List<AnnualLeave> annualLeaves) {
+        this.annualLeaves = annualLeaves;
     }
 
 

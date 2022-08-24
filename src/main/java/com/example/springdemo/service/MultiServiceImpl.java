@@ -65,6 +65,13 @@ public class MultiServiceImpl implements MultiService{
 
     @Override
     @Transactional
+    public List<AnnualLeave> findAnnualLeaveById(int theId) {
+        
+        return annualLeaveDAO.findAnnualLeaveById(theId);
+    }
+
+    @Override
+    @Transactional
     public void saveAnnualLeave(AnnualLeave annualLeave) {
         
         annualLeaveDAO.saveAnnualLeave(annualLeave);
@@ -96,5 +103,7 @@ public class MultiServiceImpl implements MultiService{
         this.covidRepository.save(covid);
         
     }
+
+    
     
 }

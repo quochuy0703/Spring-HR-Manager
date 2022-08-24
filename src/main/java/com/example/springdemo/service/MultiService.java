@@ -14,6 +14,7 @@ public interface MultiService {
     public void saveWorkHour(WorkHour workHour) ;
     public void saveUser(User theUser);
 
+    public List<AnnualLeave> findAnnualLeaveById(int theId);
     public void saveAnnualLeave(AnnualLeave annualLeave);
 
     public List<Temp> findTempByUserId(int userId);

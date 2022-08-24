@@ -47,24 +47,24 @@
                             <tr th:each="workHour : ${sessionWork.sessionWorkHour}">
                               <th scope="row" th:text="${workHourStat.index +1}"></th>
                               <td th:text="${#dates.format(workHour.startHour, 'HH:mm:ss')}"></td>
-                              <td th:text="${workHour.endHour != null ? #dates.format(workHour.endHour, 'HH:mm:ss') :'--'}"></td>
+                              <td th:text="${workHour.endHour != null ? #dates.format(workHour.endHour, 'HH:mm:ss') :'Chưa kết thúc'}"></td>
                               <td th:text="${workHour.endHour != null ? #dates.format(workHour.dateDiff, 'HH:mm:ss' ): '--'}"></td>
                               <td th:text="#{'workplace.type.' +${workHour.workPlace}}"></td>
                             </tr>
                             <tr>
                               <th colspan="2" rowspan="3" class="text-center">Tổng cộng</th>
                               <th>Tổng giờ</th>
-                              <td th:text="${#dates.format(sessionWork.sumWorkHour, 'HH:mm:ss', 'GMT' )}"></td>
+                              <td th:text="${sessionWork.stringSumWorkHour}"></td>
             
                             </tr>
                             <tr>
                               <th>Tổng thêm giờ</th>
-                              <td ><%= workedHour.overTime%></td>
+                              <td th:text="${sessionWork.stringOverTime}"></td>
             
                             </tr>
                             <tr>
                               <th>Nghỉ phép</th>
-                              <td ><% if(workedHour.leave){%><%= workedHour.leave %><%}else{%><%=0.0%><%}%></td>
+                              <td th:text="${sessionWork.leave}"></td>
             
                             </tr>
                           </div>
