@@ -32,6 +32,10 @@ public class WorkHour {
 
     @Column(name="work_place")
     private String workPlace;
+
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private User user;
 	
 
 	@Formula(value="timediff(end_hour, start_hour)")
@@ -99,6 +103,18 @@ public class WorkHour {
 
 	public void setDateDiff(Date dateDiff) {
 		this.dateDiff = dateDiff;
+	}
+
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
     

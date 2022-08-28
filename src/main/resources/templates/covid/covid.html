@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
   <head th:replace="layout::head"> </head>
   <body>
     <nav th:replace="layout::navigation"></nav>
@@ -15,9 +16,9 @@
           </a>
           <a class="btn btn-primary mx-2" th:href="@{/covid/injection}">Tiêm Covid</a>
           <a class="btn btn-primary mx-2" th:href="@{/covid/info-covid}">Tình trạng Covid</a>
-          <!-- <%if(isManager){%>
-          <a class="btn btn-primary mx-2" href="/covid/info-staff">Quản lý nhân viên</a>
-          <%}%> -->
+         
+          <a sec:authorize="hasAuthority('MANAGER')" class="btn btn-primary mx-2" th:href="@{/covid/info-staff}">Quản lý nhân viên</a>
+          
         </div>
       </div>
 

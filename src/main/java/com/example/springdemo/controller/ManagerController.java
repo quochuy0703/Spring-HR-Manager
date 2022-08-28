@@ -1,6 +1,5 @@
 package com.example.springdemo.controller;
 
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +9,18 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.View;
 
-import com.example.springdemo.SalaryForm;
 import com.example.springdemo.WorkHourSession;
 import com.example.springdemo.entity.User;
 import com.example.springdemo.entity.WorkHour;
@@ -30,26 +30,46 @@ import com.example.springdemo.utils.LeaveUtils;
 import com.example.springdemo.utils.MyDateUtils;
 
 @Controller
-@RequestMapping("/work-hour")
-public class WorkHourController {
+@RequestMapping("/manage")
+public class ManagerController {
 
-  @Autowired
-  private MultiService multiService;
+    @Autowired
+    private MultiService multiService;
     
     @GetMapping("")
-    public String showWorkHourPage(Model theModel, HttpServletRequest request){
+    public String showPageManage(Model theModel){
+        UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User theUser = multiService.findUserByEmail(userdetail.getUsername());
+
+        List<User> theUsers = multiService.findEmployeeByDepartment(theUser.getDepartment());
+
+        theModel.addAttribute("users", theUsers);
+        
+
+        return "manage/manage-staff";
+    }
+
+    @GetMapping("/staff/show/{userId}")
+    public String showWorkHourStaff(@PathVariable("userId")int theId,Model theModel){
+
+        System.out.println(multiService.findWorkHourByUserIdAndByMonth(theId, "08", "2022") );
 
         
-    
+        theModel.addAttribute("isPost", false);
+        theModel.addAttribute("sessionWorkHour", new ArrayList<>());
+        theModel.addAttribute("staffId", theId);
+        return "manage/manage-staff-workHour";
+    }
+    @PostMapping("/staff/show/{staffId}")
+    public String processWorkHourStaff(@PathVariable("staffId")int theId,Model theModel){
+        
 
-      UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      User theUser = multiService.findUserByEmail(userdetail.getUsername());
 
-      Map<String, Float> theLeaves = LeaveUtils.getLeaveOnDay(theUser.getAnnualLeaves());
+        Map<String, Float> theLeaves = LeaveUtils.getLeaveOnDay(multiService.findAnnualLeaveByIdAndByMonth(theId, "08", "2022"));
       SimpleDateFormat fm1 = new SimpleDateFormat("yyyy-MM-dd");
       int index = 0;
       long sumHour = 0L;
-      List<WorkHour> theList = theUser.getWorkHours();
+      List<WorkHour> theList = multiService.findWorkHourByUserIdAndByMonth(theId, "08", "2022");
       List<WorkHourSession> theListWorkHourSession = new ArrayList<>();
       WorkHourSession tempWorkHourSession = new WorkHourSession();
 
@@ -160,51 +180,23 @@ public class WorkHourController {
         
         
 
-    
 
-        // System.out.println(theLeaves);
-        // System.out.println(theListWorkHourSession);
-        theModel.addAttribute("user", theUser);
+        theModel.addAttribute("isPost", true);
+        theModel.addAttribute("sessionWorkHour", new ArrayList<>());
+        theModel.addAttribute("staffId", theId);
+
         theModel.addAttribute("sessionWorkHour", theListWorkHourSession);
-        return "work-hour/work-hour";
+        return "manage/manage-staff-workHour";
     }
 
 
-    @GetMapping("/annual-leaves")
-    public String showLeavePage(Model theModel, HttpServletRequest request){
-      UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      User theUser = multiService.findUserByEmail(userdetail.getUsername());
-
+    @GetMapping("/staff/delete/{workHourId}")
+    public String deleteWorkHour(@PathVariable("workHourId") int theWorkHourId, Model theModel, HttpServletRequest request){
+      WorkHour workHour = multiService.findWorkHourById(theWorkHourId);
+      int userId = workHour.getUser().getId();
+      multiService.deleteWorkHourById(theWorkHourId);
+      request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+      return "redirect:/manage/staff/show/"+userId;
       
-      theModel.addAttribute("pageTitle", "Thông tin nghỉ phép");
-      theModel.addAttribute("path", "/work-hour");
-      theModel.addAttribute("user", theUser);
-      return "work-hour/annual-leave";
-    }
-
-    @GetMapping("/salary")
-    public String showSalaryPage(Model theModel, HttpServletRequest request){
-      UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      User theUser = multiService.findUserByEmail(userdetail.getUsername());
-
-      
-      SalaryForm salaryForm = new SalaryForm();
-      theModel.addAttribute("salaryForm", salaryForm);
-      theModel.addAttribute("pageTitle", "Thông tin lương");
-      theModel.addAttribute("path", "/work-hour");
-      theModel.addAttribute("user", theUser);
-      return "work-hour/salary";
-    }
-
-    @PostMapping("/salary")
-    public String processSalaryPage(@ModelAttribute("salaryForm") SalaryForm salaryForm, Model theModel, Principal principal){
-
-      String monthSalary = salaryForm.getMonth();
-      String yearSalary = salaryForm.getYear();
-      System.out.println(principal.getName()); 
-      theModel.addAttribute("pageTitle", "Thông tin lương");
-      theModel.addAttribute("path", "/work-hour");
-      
-      return "work-hour/salary";
     }
 }

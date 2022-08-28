@@ -1,6 +1,7 @@
 package com.example.springdemo.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -43,12 +45,35 @@ public class User {
     @Column(name="annual_leave")
     private float annualLeave;
 
+    @Column(name="dob")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date doB;
+
+    @Column(name="start_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startDate;
+
+    @Column(name="salary_scale")
+    private float salaryScale;
+
+    @Column(name="department")
+    private String department;
+
+    @Column(name="image_url")
+    private String imageUrl;
+
+    @Column(name="manager")
+    private boolean isManager;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="current_work")
     private WorkHour currentWork;
 
-    @OneToMany( cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    // @OneToMany( cascade = CascadeType.ALL)
+    // @JoinColumn(name="user_id")
+    // private List<WorkHour> workHours;
+
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL)
     private List<WorkHour> workHours;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.PERSIST})
@@ -65,13 +90,17 @@ public class User {
 
 
 
+    
+
     public void addWorkHour(WorkHour workHour){
 
         if(workHours == null){
             workHours = new ArrayList<>();
         }
 
+        workHour.setUser(this);
         workHours.add(workHour);
+
        
     }
 
@@ -159,13 +188,7 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public boolean isWork() {
         return isWork;
@@ -231,6 +254,63 @@ public class User {
     public void setAnnualLeaves(List<AnnualLeave> annualLeaves) {
         this.annualLeaves = annualLeaves;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getDoB() {
+        return doB;
+    }
+
+    public void setDoB(Date doB) {
+        this.doB = doB;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public float getSalaryScale() {
+        return salaryScale;
+    }
+
+    public void setSalaryScale(float salaryScale) {
+        this.salaryScale = salaryScale;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public boolean getIsManager() {
+        return isManager;
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
+    }
+
 
 
 

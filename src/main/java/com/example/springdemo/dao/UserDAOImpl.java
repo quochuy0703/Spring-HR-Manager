@@ -1,8 +1,11 @@
 package com.example.springdemo.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +33,31 @@ public class UserDAOImpl implements UserDAO {
 
         session.saveOrUpdate(theUser);
         
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Query<User> query = session.createQuery("from User where email=:email", User.class);
+
+        query.setParameter("email", email);
+
+
+
+        return query.getResultList().get(0);
+    }
+
+    @Override
+    public List<User>  findEmployeeByDepartment(String department) {
+
+        Session session = entityManager.unwrap(Session.class);
+
+        Query<User> query = session.createQuery("from User where department=:department and manager = false", User.class);
+
+        query.setParameter("department", department);
+        
+        return query.getResultList();
     }
     
 }

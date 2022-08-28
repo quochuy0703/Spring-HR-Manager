@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout::head"> </head>
+  <body>
+    <nav th:replace="layout::navigation"></nav>
+    <h1 class="text-center">Quá trình làm việc</h1>
+    <div class="container">
+      <div class="card my-3">
+        <div class="card-header">Lựa chọn các chức năng sau:</div>
+
+        <div class="card-body">
+          <a class="btn btn-primary mx-2" th:href="@{/work-hour}">
+            Phiên làm việc
+          </a>
+          <a
+            class="btn btn-primary mx-2 disabled"
+            th:href="@{/work-hour/annual-leaves}"
+            >Ngày phép</a
+          >
+          <a class="btn btn-primary mx-2" th:href="@{/work-hour/salary}"
+            >Chi tiết lương</a
+          >
+          <a class="btn btn-primary mx-2" th:href="@{/work-hour/search}"
+            >Tìm kiếm</a
+          >
+        </div>
+      </div>
+      <div class="card my-3">
+        <div class="card-header">
+          <h4 class="text-center">Chi tiết ngày nghỉ phép</h4>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Bắt đầu</th>
+                <th scope="col">Kết thúc</th>
+                <th scope="col">Thời gian</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="annualLeave : ${user.annualLeaves}">
+                <th scope="row" th:text="${annualLeaveStat.index + 1}"></th>
+                <td
+                  th:text="${(annualLeave.morningStartDate ? 'Sáng ': 'Chiều ') + #dates.format(annualLeave.startDate, 'dd-MM-yyyy')}"
+                ></td>
+                <td
+                  th:text="${(annualLeave.morningEndDate ? 'Sáng ': 'Chiều ') + #dates.format(annualLeave.endDate, 'dd-MM-yyyy')}"
+                ></td>
+                <td th:text="${annualLeave.countDay}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

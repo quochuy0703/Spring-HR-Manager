@@ -15,9 +15,7 @@
           </a>
           <a class="btn btn-primary mx-2 disabled" th:href="@{/covid/injection}">Tiêm Covid</a>
           <a class="btn btn-primary mx-2" th:href="@{/covid/info-covid}">Tình trạng Covid</a>
-          <!-- <%if(isManager){%>
-          <a class="btn btn-primary mx-2" href="/covid/info-staff">Quản lý nhân viên</a>
-          <%}%> -->
+          <a sec:authorize="hasAuthority('MANAGER')" class="btn btn-primary mx-2" th:href="@{/covid/info-staff}">Quản lý nhân viên</a>
         </div>
       </div>
 

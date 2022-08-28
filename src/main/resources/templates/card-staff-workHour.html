@@ -1,0 +1,61 @@
+<th:block th:fragment="card-staff(user)">
+  <div class="container_card">
+    <div class="my_header">
+      <div class="my_header_left">
+        <input type="checkbox" />
+      </div>
+      <div class="my_header_right">
+        <!-- <div className="header_button">
+                <a href="/manage/staff/<%=user._id%>">Chi tiết</a>
+              </div> -->
+        <!-- {/* <div className="header_button">
+                  <button>Action</button>
+                </div>
+                <div className="header_button">
+                  <button>Action</button>
+                </div> */} -->
+      </div>
+    </div>
+    <div class="my_middle">
+      <div class="my_middle_image">
+        <img
+          class="my_middle_image_avatar"
+          src="/<%= user.imageUrl%>"
+          alt="avatar"
+        />
+      </div>
+      <div class="my_middle_content">
+        <div class="my_middle_content_name">
+          <a th:href="@{'/manage/staff/show/'+ ${user.id}}"
+            ><strong th:text="${user.lastName + ' ' +user.firstName}"></strong
+          ></a>
+        </div>
+        <div class="my_middle_content_job">
+          <small
+            h:text="${user.isWork ? 'Đang làm việc': 'Không làm việc'}"
+          ></small>
+        </div>
+      </div>
+    </div>
+    <div class="my_footer_card">
+      <div class="my_footer_start">
+        <div class="my_footer_start_dept">
+          <p>
+            <strong>Phòng Ban</strong>
+          </p>
+          <p th:text="${user.department}"></p>
+        </div>
+        <div class="my_footer_start_joinDate">
+          <p>
+            <strong>Ng. vào làm</strong>
+          </p>
+          <p th:text="${user.startDate}"></p>
+        </div>
+      </div>
+      <div class="my_footer_end my-1">
+        <p th:text="${'Nghỉ phép: '+ user.annualLeave}"></p>
+        <p th:text="${'Sinh nhật: ' +user.doB}"></p>
+      </div>
+    </div>
+  </div>
+</th:block>

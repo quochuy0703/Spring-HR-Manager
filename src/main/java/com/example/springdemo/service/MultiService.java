@@ -11,10 +11,17 @@ import com.example.springdemo.entity.WorkHour;
 
 public interface MultiService {
     public User findUserById(int theId);
+    public User findUserByEmail(String email);
+    public List<User> findEmployeeByDepartment(String department);
+    
     public void saveWorkHour(WorkHour workHour) ;
+    public List<WorkHour> findWorkHourByUserIdAndByMonth(int theUserId, String month, String year);
+    public void deleteWorkHourById(int theWorkHourId);
+    public WorkHour findWorkHourById(int theWorkHourId);
     public void saveUser(User theUser);
 
     public List<AnnualLeave> findAnnualLeaveById(int theId);
+    public List<AnnualLeave> findAnnualLeaveByIdAndByMonth(int theId, String month, String year);
     public void saveAnnualLeave(AnnualLeave annualLeave);
 
     public List<Temp> findTempByUserId(int userId);

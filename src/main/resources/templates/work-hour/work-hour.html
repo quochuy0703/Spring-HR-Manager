@@ -27,56 +27,64 @@
                   
                 </div>
                 <div class="card-body">
+
+                  <th:block th:if="${#lists.size(sessionWorkHour) == 0}">
+                            <div>CHưa có thông tin</div>
+                  </th:block>
+                  <th:block th:if="${#lists.size(sessionWorkHour)!= 0}">
                     <table class="table">
            
-                        <thead>
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Bắt đầu</th>
+                          <th scope="col">Kết thúc</th>
+                          <th scope="col">Thời gian</th>
+                          <th scope="col">Nơi làm việc</th>
+          
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                        <div th:each="sessionWork : ${sessionWorkHour}">
                           <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Bắt đầu</th>
-                            <th scope="col">Kết thúc</th>
-                            <th scope="col">Thời gian</th>
-                            <th scope="col">Nơi làm việc</th>
-            
+                            <th colspan="5" class="text-center" th:text="${#dates.format(sessionWork.dateSession, 'yyyy-MM-dd')}"></th>
                           </tr>
-                        </thead>
-                        <tbody>
-                          <div th:each="sessionWork : ${sessionWorkHour}">
-                            <tr>
-                              <th colspan="5" class="text-center" th:text="${#dates.format(sessionWork.dateSession, 'yyyy-MM-dd')}"></th>
-                            </tr>
-                            <tr th:each="workHour : ${sessionWork.sessionWorkHour}">
-                              <th scope="row" th:text="${workHourStat.index +1}"></th>
-                              <td th:text="${#dates.format(workHour.startHour, 'HH:mm:ss')}"></td>
-                              <td th:text="${workHour.endHour != null ? #dates.format(workHour.endHour, 'HH:mm:ss') :'Chưa kết thúc'}"></td>
-                              <td th:text="${workHour.endHour != null ? #dates.format(workHour.dateDiff, 'HH:mm:ss' ): '--'}"></td>
-                              <td th:text="#{'workplace.type.' +${workHour.workPlace}}"></td>
-                            </tr>
-                            <tr>
-                              <th colspan="2" rowspan="3" class="text-center">Tổng cộng</th>
-                              <th>Tổng giờ</th>
-                              <td th:text="${sessionWork.stringSumWorkHour}"></td>
-            
-                            </tr>
-                            <tr>
-                              <th>Tổng thêm giờ</th>
-                              <td th:text="${sessionWork.stringOverTime}"></td>
-            
-                            </tr>
-                            <tr>
-                              <th>Nghỉ phép</th>
-                              <td th:text="${sessionWork.leave}"></td>
-            
-                            </tr>
-                          </div>
-                            
-                                
-                       
-                            
-            
-              
+                          <tr th:each="workHour : ${sessionWork.sessionWorkHour}">
+                            <th scope="row" th:text="${workHourStat.index +1}"></th>
+                            <td th:text="${#dates.format(workHour.startHour, 'HH:mm:ss')}"></td>
+                            <td th:text="${workHour.endHour != null ? #dates.format(workHour.endHour, 'HH:mm:ss') :'Chưa kết thúc'}"></td>
+                            <td th:text="${workHour.endHour != null ? #dates.format(workHour.dateDiff, 'HH:mm:ss' ): '--'}"></td>
+                            <td th:text="#{'workplace.type.' +${workHour.workPlace}}"></td>
+                          </tr>
+                          <tr>
+                            <th colspan="2" rowspan="3" class="text-center">Tổng cộng</th>
+                            <th>Tổng giờ</th>
+                            <td th:text="${sessionWork.stringSumWorkHour}"></td>
+          
+                          </tr>
+                          <tr>
+                            <th>Tổng thêm giờ</th>
+                            <td th:text="${sessionWork.stringOverTime}"></td>
+          
+                          </tr>
+                          <tr>
+                            <th>Nghỉ phép</th>
+                            <td th:text="${sessionWork.leave}"></td>
+          
+                          </tr>
+                        </div>
                           
-                        </tbody>
-                      </table>
+                              
+                     
+                          
+          
+            
+                        
+                      </tbody>
+                    </table>
+                  </th:block>
+                    
                 </div>
               
           </div>

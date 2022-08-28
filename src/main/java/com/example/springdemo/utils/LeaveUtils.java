@@ -45,10 +45,31 @@ public class LeaveUtils {
             for(Date d= leave.getStartDate(); 
             d.before(leave.getEndDate()) || d.equals(leave.getEndDate()); 
             d= plusOneDate(d) ){
-              System.out.println(d);
+
               float count = getDay(d, leave);
               
               if(count !=0){
+                map.put(MyDateUtils.DateToString(d), count);
+              }
+
+            }
+        }
+        return map;
+      }
+
+
+      public static HashMap<String, Float> getLeaveOnDayByMonth(List<AnnualLeave> theLists, String month, String year){
+        HashMap<String, Float> map = new HashMap<>();
+        for(AnnualLeave leave : theLists){
+         
+            for(Date d= leave.getStartDate(); 
+            d.before(leave.getEndDate()) || d.equals(leave.getEndDate()); 
+            d= plusOneDate(d) ){
+
+              float count = getDay(d, leave);
+           
+              
+              if(count !=0 && d.getMonth()+1 == Integer.parseInt(month)){
                 map.put(MyDateUtils.DateToString(d), count);
               }
 

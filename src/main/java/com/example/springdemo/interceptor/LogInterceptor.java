@@ -27,9 +27,9 @@ public class LogInterceptor implements HandlerInterceptor  {
         
                 request.setAttribute("startTime", startTime);
 
-                User theUser = multiService.findUserById(1);
+                // User theUser = multiService.findUserById(1);
                 
-                request.setAttribute("user", theUser);
+                // request.setAttribute("user", theUser);
 
                 return true;
 	}

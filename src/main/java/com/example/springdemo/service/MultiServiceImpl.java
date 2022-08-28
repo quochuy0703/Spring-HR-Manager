@@ -93,15 +93,59 @@ public class MultiServiceImpl implements MultiService{
     }
 
     @Override
+    @Transactional
     public void saveInjection(Injection injection) {
         this.injectionRepository.save(injection);
         
     }
 
     @Override
+    @Transactional
     public void saveCovid(Covid covid) {
         this.covidRepository.save(covid);
         
+    }
+
+    @Override
+    @Transactional
+    public User findUserByEmail(String email) {
+        
+        return userDAO.findUserByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public List<User> findEmployeeByDepartment(String department) {
+        
+        return userDAO.findEmployeeByDepartment(department);
+    }
+
+    @Override
+    @Transactional
+    public List<WorkHour> findWorkHourByUserIdAndByMonth(int theUserId, String month, String year) {
+        
+        return workHourDAO.findWorkHourByUserIdAndByMonth(theUserId, month, year);
+    }
+
+    @Override
+    @Transactional
+    public List<AnnualLeave> findAnnualLeaveByIdAndByMonth(int theId, String month, String year) {
+        
+        return annualLeaveDAO.findAnnualLeaveByIdAndByMonth(theId, month, year);
+    }
+
+    @Override
+    @Transactional
+    public void deleteWorkHourById(int theWorkHourId) {
+        workHourDAO.deleteWorkHourById(theWorkHourId);
+        
+    }
+
+    @Override
+    @Transactional
+    public WorkHour findWorkHourById(int theWorkHourId) {
+        
+        return workHourDAO.findWorkHourById(theWorkHourId);
     }
 
     

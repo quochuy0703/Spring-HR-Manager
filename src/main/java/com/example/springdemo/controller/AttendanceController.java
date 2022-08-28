@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +31,12 @@ public class AttendanceController {
     public String showPage(HttpServletRequest request, Model theModel){
         
 
-        User user = (User) request.getAttribute("user");
-        System.out.println(user.getCurrentWork());
+        // User user = (User) request.getAttribute("user");
+
+        UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = multiService.findUserByEmail(userdetail.getUsername());
+
+
         WorkHour workHour = new WorkHour();
         workHour.setWorkPlace("1");
 
@@ -46,7 +52,8 @@ public class AttendanceController {
     @PostMapping("/checkin")
     public String processCheckIn(@ModelAttribute("workHour") WorkHour workHour, HttpServletRequest request){
 
-        User theUser = (User )request.getAttribute("user");
+        UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User theUser = multiService.findUserByEmail(userdetail.getUsername());
 
         workHour.setStartHour(new Date());
         theUser.addWorkHour(workHour);
@@ -61,7 +68,10 @@ public class AttendanceController {
     @PostMapping("/checkout")
     public String processCheckOut(HttpServletRequest request){
 
-        User theUser = (User )request.getAttribute("user");
+        UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User theUser = multiService.findUserByEmail(userdetail.getUsername());
+
+
         theUser.getCurrentWork().setEndHour(new Date());
         multiService.saveWorkHour(theUser.getCurrentWork());
         theUser.setCurrentWork(null);
@@ -75,7 +85,8 @@ public class AttendanceController {
     @GetMapping("/leave")
     public String showLeave(Model theModel, HttpServletRequest request){
 
-        User theUser = (User )request.getAttribute("user");
+         UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User theUser = multiService.findUserByEmail(userdetail.getUsername());
 
         AnnualLeave annualLeave = new AnnualLeave();
 
@@ -89,7 +100,8 @@ public class AttendanceController {
     @PostMapping("/leave")
     public String showLeave(@ModelAttribute("annualLeve") AnnualLeave annualLeave, Model theModel, HttpServletRequest request){
 
-        User theUser = (User )request.getAttribute("user");
+        UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User theUser = multiService.findUserByEmail(userdetail.getUsername());
 
         //tín toán số ngày nghỉ phép và lưu vào countDay
         long diffdate = annualLeave.getEndDate().getTime() - annualLeave.getStartDate().getTime();

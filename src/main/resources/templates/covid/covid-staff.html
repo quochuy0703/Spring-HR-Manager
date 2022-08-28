@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+  <head>
+    <th:block th:replace="layout::head1"> </th:block>
+    <link rel="stylesheet" href="/css/card-staff.css" />
+  </head>
+  <body>
+    <nav th:replace="layout::navigation"></nav>
+    <h1 class="text-center">Thông tin làm việc</h1>
+    <div class="container">
+      <div class="card my-3">
+        <div class="card-header">Lựa chọn các chức năng sau:</div>
+        <div class="card-body">
+          <a class="btn btn-primary mx-2"> Thân nhiệt </a>
+          <a class="btn btn-primary mx-2" th:href="@{/covid/injection}"
+            >Tiêm Covid</a
+          >
+          <a class="btn btn-primary mx-2" th:href="@{/covid/info-covid}"
+            >Tình trạng Covid</a
+          >
+
+          <a
+            sec:authorize="hasAuthority('MANAGER')"
+            class="btn btn-primary mx-2 disabled"
+            th:href="@{/covid/info-staff}"
+            >Quản lý nhân viên</a
+          >
+        </div>
+      </div>
+      <div class="card my-3">
+        <div class="card-header text-center">
+          <h4 class="text-center">Thông tin nhân viên</h4>
+          <a class="btn btn-primary" href="/covid/pdf/all-staff">Xuất pdf </a>
+        </div>
+        <div class="card-body">
+          <div class="row d-flex justify-content-around">
+            <th:block th:each="user: ${users}">
+              <th:block th:replace="card-staff::card-staff(${user})"></th:block>
+            </th:block>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
