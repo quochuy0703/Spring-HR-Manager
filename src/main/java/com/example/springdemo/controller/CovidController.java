@@ -1,5 +1,6 @@
 package com.example.springdemo.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,8 +10,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -162,26 +170,35 @@ public class CovidController {
 
     @GetMapping("/staff/pdf/{userId}")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public void exportToPDF(@PathVariable("userId")int theId,HttpServletResponse response) throws DocumentException, IOException {
+    public Object exportToPDF(@PathVariable("userId")int theId,HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException {
 
         UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      
+        User theUser = multiService.findUserByEmail(userdetail.getUsername());
 
         User theUserStaff = multiService.findUserById(theId);
 
-        
+       if(!theUser.getDepartment().equals(theUserStaff.getDepartment())){
 
-        response.setContentType("application/pdf");
+        throw new AccessDeniedException("Unauthorised Access!");
+       }
+        UserPDFExport exporter = new UserPDFExport();
+
+        
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
+
+        // response.setContentType("application/pdf");
+        // String headerKey = "Content-Disposition";
+        // String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+        // response.setHeader(headerKey, headerValue);
          
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
-        response.setHeader(headerKey, headerValue);
-         
-         
-        UserPDFExport exporter = new UserPDFExport();
-        exporter.exportCovidPdf(response, theUserStaff);
+        // exporter.exportCovidPdf(response, theUserStaff);
+        // IOUtils.copy(new ByteArrayInputStream(exporter.exportCovidPdfByteArray(theUserStaff).toByteArray()), response.getOutputStream());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=users_" + currentDateTime + ".pdf");
+
+        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(exporter.exportCovidPdfByteArray(theUserStaff).toByteArray());
          
     }
 

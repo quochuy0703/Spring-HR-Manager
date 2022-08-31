@@ -27,6 +27,9 @@ public class HandleErrorController implements ErrorController {
             else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 theModel.addAttribute("pageTitle", "Some error occurred!");
                 return "error/error-500";
+            }else if(statusCode == HttpStatus.FORBIDDEN.value()) {
+                theModel.addAttribute("pageTitle", "Forbidden!");
+                return "error/error-403";
             }
         }
         return "error/error";

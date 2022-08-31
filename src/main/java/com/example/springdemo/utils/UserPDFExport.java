@@ -1,5 +1,6 @@
 package com.example.springdemo.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -86,6 +87,7 @@ public class UserPDFExport {
             // step 2:
             // we create a writer that listens to the document
             PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
+           
             writer.setPageEvent(new MyPageEventListener(user));
             
             ResourceLoader resourceLoader = new DefaultResourceLoader();
@@ -135,6 +137,81 @@ public class UserPDFExport {
 
         // step 5: we close the document
         document.close();
+
+
+    }
+
+
+    public ByteArrayOutputStream exportCovidPdfByteArray(User user){
+
+        // step 1: creation of a document-object
+        Document document = new Document();
+
+        System.out.println("the Paragraph object");
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        
+        try {
+            
+            // step 2:
+            // we create a writer that listens to the document
+            PdfWriter writer = PdfWriter.getInstance(document, out);
+           
+            writer.setPageEvent(new MyPageEventListener(user));
+            
+            ResourceLoader resourceLoader = new DefaultResourceLoader();
+            System.out.println(resourceLoader.getResource("classpath:static/fonts/times.ttf").getFile().getAbsolutePath() );
+            BaseFont bfComic = BaseFont.createFont(resourceLoader.getResource("classpath:static/fonts/times.ttf").getFile().getAbsolutePath() , BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font font = new Font(bfComic, 8);
+
+            // HeaderFooter header = new HeaderFooter(new Phrase("Phòng: " + user.getDepartment(), font), false);
+            
+            
+            // PdfPTable tbl = new PdfPTable(3);
+            // tbl.setTotalWidth(523);
+            // tbl.addCell("1st cell");
+            // tbl.addCell("2nd cell");
+            // tbl.addCell("3rd cell");
+            // Phrase chunk = new Phrase();
+            // chunk.add(tbl);
+            // HeaderFooter header = new HeaderFooter(chunk, false);
+            
+            // HeaderFooter footer = new HeaderFooter(new Phrase("footer "), new Phrase("."));
+            // header.setBorder(Rectangle.NO_BORDER);
+            
+            // document.setHeader(header);
+            
+
+            // step 3: we open the document
+            document.open();
+            // step 4:
+
+            Paragraph p = new Paragraph(new Chunk(
+                "Thông tin Covid ",
+                FontFactory.getFont(FontFactory.HELVETICA, 18)));
+                p.setAlignment(Paragraph.ALIGN_CENTER);
+
+            document.add(p);
+
+            printUserInfoCovid(user, document, font);
+
+            
+            
+
+        } catch (DocumentException de) {
+            System.err.println(de.getMessage());
+        } catch (IOException ioe) {
+            System.err.println(ioe.getMessage());
+        }
+
+        // step 5: we close the document
+        document.close();
+
+
+        return out;
+
+
     }
 
     private void printUserInfoCovid(User user, Document document, Font font) {
