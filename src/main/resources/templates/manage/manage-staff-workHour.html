@@ -102,7 +102,7 @@
                         <td th:text="${workHour.endHour != null ? #dates.format(workHour.endHour, 'HH:mm:ss') :'Chưa kết thúc'}"></td>
                         <td th:text="${workHour.endHour != null ? #dates.format(workHour.dateDiff, 'HH:mm:ss' ): '--'}"></td>
                         <td th:text="#{'workplace.type.' +${workHour.workPlace}}"></td>
-                        <td><a  class="btn btn-primary" onclick="if(!confirm('Ban co muon xoa phien lam viec nay?'))return false" th:href="@{'/manage/staff/delete/'+${workHour.id}}">Xoá</a></td>
+                        <td><a  class="btn btn-primary" th:classappend="${workHour.endHour == null ? 'disabled' : ''}" onclick="if(!confirm('Ban co muon xoa phien lam viec nay?'))return false" th:href="@{'/manage/staff/delete/'+${workHour.id}}">Xoá</a></td>
                     </tr>
                     <tr>
                         <th colspan="2" rowspan="3" class="text-center">Tổng cộng</th>

@@ -12,6 +12,7 @@ public class WorkHourSession {
     private String stringSumWorkHour;
     private long overTime;
     private String stringOverTime;
+    private long missTime;
     private float leave;
     public WorkHourSession() {
 
@@ -58,11 +59,18 @@ public class WorkHourSession {
     public void setStringOverTime(String stringOverTime) {
         this.stringOverTime = stringOverTime;
     }
+    
+    public long getMissTime() {
+        return missTime;
+    }
+    public void setMissTime(long missTime) {
+        this.missTime = missTime;
+    }
     @Override
     public String toString() {
-        return "WorkHourSession [dateSession=" + dateSession + ", leave=" + leave + ", overTime=" + overTime
-                + ", stringOverTime=" + stringOverTime + ", stringSumWorkHour=" + stringSumWorkHour + ", sumWorkHour="
-                + sumWorkHour + "]";
+        return "WorkHourSession [dateSession=" + dateSession + ", leave=" + leave + ", missTime=" + missTime
+                + ", overTime=" + overTime + ", sessionWorkHour=" + sessionWorkHour + ", stringOverTime="
+                + stringOverTime + ", stringSumWorkHour=" + stringSumWorkHour + ", sumWorkHour=" + sumWorkHour + "]";
     }
 
     

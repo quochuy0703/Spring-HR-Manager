@@ -7,5 +7,6 @@ import com.example.springdemo.entity.AnnualLeave;
 public interface AnnualLeaveDAO {
     public void saveAnnualLeave(AnnualLeave annualLeave);
     public List<AnnualLeave> findAnnualLeaveById(int theId);
+    public List<AnnualLeave> findAnnualLeaveByUserId(int theUserId);
     public List<AnnualLeave> findAnnualLeaveByIdAndByMonth(int theId, String month, String year);
 }

@@ -20,7 +20,7 @@
       <div class="my_middle_image">
         <img
           class="my_middle_image_avatar"
-          src="/<%= user.imageUrl%>"
+          th:src="@{'/'+${user.ImagePath}}"
           alt="avatar"
         />
       </div>
@@ -45,7 +45,7 @@
           <p>
             <strong>Ng. vào làm</strong>
           </p>
-          <p th:text="${user.startDate}"></p>
+          <p th:text="${#dates.format(user.startDate,'yyyy-MM-dd')}"></p>
         </div>
       </div>
       <div class="my_footer_end my-1">

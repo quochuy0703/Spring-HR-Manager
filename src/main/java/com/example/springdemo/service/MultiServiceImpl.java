@@ -148,6 +148,11 @@ public class MultiServiceImpl implements MultiService{
         return workHourDAO.findWorkHourById(theWorkHourId);
     }
 
+    @Override
+    public List<AnnualLeave> findAnnualLeaveByUserId(int theUserId) {
+        return annualLeaveDAO.findAnnualLeaveByUserId(theUserId);
+    }
+
     
     
 }

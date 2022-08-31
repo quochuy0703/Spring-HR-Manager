@@ -25,7 +25,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       <div class="card my-3">
         <div class="card-header">
           <h4 class="text-center">Đăng ký thân nhiệt</h4>
-          <p th:text="#{title.welcome}"></p>
+
         </div>
         <div class="card-body">
           <form th:action="@{/covid/temp}" th:object="${temp}" method="POST">

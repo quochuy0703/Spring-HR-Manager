@@ -53,5 +53,18 @@ public class AnnualLeaveDAOImpl implements AnnualLeaveDAO {
 
         return theLeaves;
     }
+
+    @Override
+    public List<AnnualLeave> findAnnualLeaveByUserId(int theUserId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Query<AnnualLeave> query = session.createQuery("from AnnualLeave w where w.user.id = :theId", AnnualLeave.class);
+
+        query.setParameter("theId", theUserId);
+
+        List<AnnualLeave> theLeaves = query.list();
+
+        return theLeaves;
+    }
     
 }

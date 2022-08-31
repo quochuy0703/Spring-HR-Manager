@@ -1,7 +1,10 @@
 package com.example.springdemo.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +22,7 @@ import com.example.springdemo.entity.AnnualLeave;
 import com.example.springdemo.entity.User;
 import com.example.springdemo.entity.WorkHour;
 import com.example.springdemo.service.MultiService;
+import com.example.springdemo.utils.LeaveUtils;
 
 @Controller
 @RequestMapping("/")
@@ -103,25 +107,40 @@ public class AttendanceController {
         UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User theUser = multiService.findUserByEmail(userdetail.getUsername());
 
-        //tín toán số ngày nghỉ phép và lưu vào countDay
-        long diffdate = annualLeave.getEndDate().getTime() - annualLeave.getStartDate().getTime();
-        float countDay = TimeUnit.MILLISECONDS.toDays(diffdate) % 365;
-        if (diffdate < 0) {
-            
-        }
-        if (!annualLeave.isMorningStartDate()) {
-            countDay = countDay - 0.5f;
-        }
-        if (!annualLeave.isMorningEndDate()) {
-            countDay = countDay + 0.5f;
-        }
+        float countDay = LeaveUtils.getCountLeave(annualLeave);
         annualLeave.setCountDay(countDay);
 
-        if(countDay > theUser.getAnnualLeave()){
+        if(countDay > theUser.getAnnualLeave() || countDay < 0){
             theModel.addAttribute("user", theUser);
             theModel.addAttribute("path", "/");
-            theModel.addAttribute("pageTitle", "Xin nghi phep");
-            theModel.addAttribute("errorMessage", "Nhap nghi phep khong thanh cong");
+            theModel.addAttribute("pageTitle", "Xin nghỉ phép");
+            theModel.addAttribute("errorMessage", "Vượt quá ngày nghỉ phép hiện có!");
+            theModel.addAttribute("annualLeave", annualLeave);
+
+            if(countDay<0){
+                theModel.addAttribute("errorMessage", "Ngày kết thúc không thể nhỏ hơn ngày bắt đầu!");
+            }
+
+            return "/leave";
+        }
+
+        //Kiểm tra xem có trùng ngày nghỉ phép hay không
+        ArrayList<AnnualLeave> listLeave = new ArrayList<>();
+        listLeave.add(annualLeave);
+        Map<String, Float> listAnnualLeave = LeaveUtils.getLeaveOnDay(listLeave, true) ;
+
+        List<AnnualLeave> list = multiService.findAnnualLeaveByUserId(theUser.getId());
+        Map<String, Float> listAnnualLeave1 = LeaveUtils.getLeaveOnDay(list, true) ;
+
+        // System.out.println(listAnnualLeave);
+        // System.out.println(listAnnualLeave1);
+
+    
+        if(LeaveUtils.checkSameLeave(listAnnualLeave, listAnnualLeave1)){
+            theModel.addAttribute("user", theUser);
+            theModel.addAttribute("path", "/");
+            theModel.addAttribute("pageTitle", "Xin nghỉ phép");
+            theModel.addAttribute("errorMessage", "Trùng ngày nghỉ phép đã đăng ký!");
             theModel.addAttribute("annualLeave", annualLeave);
 
             return "/leave";

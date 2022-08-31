@@ -311,8 +311,10 @@ public class User {
         this.isManager = isManager;
     }
 
-
-
+    //Tao thong tin duong dan
+    public String getImagePath(){
+        return "images/"+id+"/"+imageUrl;
+    }
 
 
 

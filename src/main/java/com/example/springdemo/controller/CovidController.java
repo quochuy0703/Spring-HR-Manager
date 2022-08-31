@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -42,8 +43,12 @@ public class CovidController {
         User theUser = multiService.findUserByEmail(userdetail.getUsername());
 
 
+        
         Temp theTemp = new Temp();
         theTemp.setTemp(37.0f);
+
+        theModel.addAttribute("path", "/covid");
+        theModel.addAttribute("pageTitle", "Thông tin nhiệt độ");
         theModel.addAttribute("temp", theTemp);
         theModel.addAttribute("user", theUser);
         return "covid/covid";
@@ -78,6 +83,8 @@ public class CovidController {
 
         Injection theInjection = new Injection();
         
+        theModel.addAttribute("path", "/covid");
+        theModel.addAttribute("pageTitle", "Thông tin mũi tiêm");
         theModel.addAttribute("injection", theInjection);
         theModel.addAttribute("user", theUser);
         return "covid/injection";
@@ -110,6 +117,9 @@ public class CovidController {
 
 
         Covid theCovid = new Covid();
+
+        theModel.addAttribute("path", "/covid");
+        theModel.addAttribute("pageTitle", "Thông tin Covid");
         theModel.addAttribute("covid", theCovid);
         theModel.addAttribute("user", theUser);
         return "covid/info";
@@ -135,6 +145,7 @@ public class CovidController {
     }
 
     @GetMapping("/info-staff")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public String ShowInfoStaff(Model theModel){
 
         UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -142,17 +153,23 @@ public class CovidController {
 
         List<User> theUsers = multiService.findEmployeeByDepartment(theUser.getDepartment());
 
+        theModel.addAttribute("path", "/covid");
+        theModel.addAttribute("pageTitle", "Thông tin nhân viên");
         theModel.addAttribute("users", theUsers);
 
         return "covid/covid-staff";
     }
 
     @GetMapping("/staff/pdf/{userId}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public void exportToPDF(@PathVariable("userId")int theId,HttpServletResponse response) throws DocumentException, IOException {
 
-       
+        UserDetails userdetail = (UserDetails ) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      
 
-        User theUser = multiService.findUserById(theId);
+        User theUserStaff = multiService.findUserById(theId);
+
+        
 
         response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -164,11 +181,13 @@ public class CovidController {
          
          
         UserPDFExport exporter = new UserPDFExport();
-        exporter.exportCovidPdf(response, theUser);
+        exporter.exportCovidPdf(response, theUserStaff);
          
     }
 
+    
     @GetMapping("/pdf/all-staff")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public void exportAllStaffToPDF(HttpServletResponse response) throws DocumentException, IOException {
 
        

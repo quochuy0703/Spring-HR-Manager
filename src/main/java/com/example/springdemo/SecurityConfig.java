@@ -2,6 +2,7 @@ package com.example.springdemo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.example.springdemo.service.UserLoginServiceImpl;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
 
@@ -29,6 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain FilterChain(HttpSecurity http) throws Exception{
 
         http.authorizeRequests().antMatchers("/login").permitAll()
+        .antMatchers("/manage/**").hasAuthority("MANAGER")
         .anyRequest().authenticated()
         .and().formLogin().usernameParameter("email").passwordParameter("password").permitAll()
         .and().logout().permitAll();

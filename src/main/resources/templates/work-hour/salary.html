@@ -78,9 +78,13 @@
 
         <div class="card my-3">
           <div class="card-header">
-            <h4 class="text-center">Chi tiết lương tháng</h4>
+            <th:block th:if="${month == null}"><h4 class="text-center">Chi tiết lương tháng</h4></th:block>
+            <th:block th:if="${month != null}"><h4 class="text-center" th:text="${'Chi tiết lương tháng '+ month+'-'+year}"+></h4></th:block>
+            
           </div>
           <div class="card-body">
+            <th:block th:if="${salary == null}"><p>Chưa có thông tin</p></th:block>
+            <th:block th:if="${salary != null}"><p th:text="${'Lương '+month+'-'+year+': '+salary}"></p></th:block>
             
              
               

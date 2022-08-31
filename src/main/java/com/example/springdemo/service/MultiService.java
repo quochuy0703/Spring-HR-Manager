@@ -23,6 +23,7 @@ public interface MultiService {
     public List<AnnualLeave> findAnnualLeaveById(int theId);
     public List<AnnualLeave> findAnnualLeaveByIdAndByMonth(int theId, String month, String year);
     public void saveAnnualLeave(AnnualLeave annualLeave);
+    public List<AnnualLeave> findAnnualLeaveByUserId(int theUserId);
 
     public List<Temp> findTempByUserId(int userId);
 

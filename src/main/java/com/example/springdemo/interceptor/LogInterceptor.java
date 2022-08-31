@@ -23,6 +23,8 @@ public class LogInterceptor implements HandlerInterceptor  {
                 long startTime = System.currentTimeMillis();
                 System.out.println("\n-------- LogInterception.preHandle --- ");
                 System.out.println("Request URL: " + request.getRequestURL());
+                System.out.println("Method: " + request.getMethod());
+                
                 System.out.println("Start Time: " + System.currentTimeMillis());
         
                 request.setAttribute("startTime", startTime);
